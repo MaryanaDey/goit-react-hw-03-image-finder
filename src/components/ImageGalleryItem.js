@@ -1,11 +1,10 @@
 import React from 'react';
+import '../styles/styles.css';
 
-import '../styles/styles.scc';
-
-export default function ImageGalleryItem({ webformateUrl, tags, largeImageURL, onClick }) {
+export default function ImageGalleryItem({ webformatURL, tags, largeImageURL, onClick }) {
   return (
     <li onClick={() => onClick(largeImageURL, tags)} className="ImageGalleryItem">
-      <img src={webformateUrl} alt={tags} />
+      <img src={webformatURL} alt={tags} className="ImageGalleryItem-image" />
     </li>
   );
 }

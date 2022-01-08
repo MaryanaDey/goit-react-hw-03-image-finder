@@ -1,14 +1,14 @@
 function imagesFetch(nameImage, page) {
-  const KEY = 'key=24217410-030407998cebbbeb7658c8c03';
+  const KEY = 'key=19055497-436f2f9143aedeb9fa32eebb3';
   const GENERAL_LINK = 'https://pixabay.com/api/';
 
   return fetch(
-    `${GENERAL_LINK}?&q=${nameImage}&page=${page}&image_type=photo&orientation=horizontal&per_page=12`,
-  ).then(response => {
-    if (response.ok) {
-      return response.json();
+    `${GENERAL_LINK}?${KEY}&q=${nameImage}&page=${page}&image_type=photo&orientation=horizontal&per_page=12`,
+  ).then(r => {
+    if (r.ok) {
+      return r.json();
     }
-    return Promise.reject(new Error('Картинка с таким адресом отсутствует'));
+    return Promise.reject(new Error('Картинки с таким именем отсутсвуют'));
   });
 }
 const api = {

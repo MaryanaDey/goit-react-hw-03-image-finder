@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Api from './services/FetchAPI';
-import Button from './components/Button';
 import Searchbar from './components/Searchbar';
-import '../src/styles/styles.css';
+import Button from './components/Button';
+import ImageGallery from './components/ImageGallery';
+import Loader from './components/Loader';
+import './styles/styles.css';
+//import Modal from "components/Modal";
 
 export default class Finder extends Component {
   state = {
@@ -16,13 +21,24 @@ export default class Finder extends Component {
     error: null,
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.nameImage !== this.state.nameImage) {
+      this.setState({
+        page: 1,
+        nameImage: this.state.nameImage,
+        imagesArray: [],
+      });
+      this.searchImagesFetch();
+    }
+  }
+
   searchImagesFetch = () => {
     const { page, nameImage } = this.state;
 
     this.setState({ loading: true });
 
     Api.imagesFetch(nameImage, page)
-      .then(imagesArrayFetch => this.checkNewFetchImagesArrey(imagesArrayFetch.hits))
+      .then(imagesArrayFetch => this.checkNewFetchImagesArray(imagesArrayFetch.hits))
       .catch(error => this.setState({ error }))
       .finally(() =>
         this.setState(prevState => ({
@@ -32,7 +48,7 @@ export default class Finder extends Component {
       );
   };
 
-  checkNewFetchImagesArrey = imagesArrayFetch => {
+  checkNewFetchImagesArray = imagesArrayFetch => {
     imagesArrayFetch === []
       ? this.setState({
           imagesArray: imagesArrayFetch,
@@ -40,6 +56,10 @@ export default class Finder extends Component {
       : this.setState(prevState => ({
           imagesArray: [...prevState.imagesArray, ...imagesArrayFetch],
         }));
+  };
+
+  togleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
   isHendleFormaSubmit = nameImage => {
@@ -66,11 +86,24 @@ export default class Finder extends Component {
     this.searchImagesFetch();
     this.scrolGallery();
   };
+
   render() {
+    const { loading, showModal, nameImage, imagesArray, selectedImage } = this.state;
+
     return (
       <>
-        <Searchbar />
-        <Button onClick={this.onClickLoadMore}>загрузить ещё</Button>
+        <Searchbar onSubmit={this.isHendleFormaSubmit} />
+
+        {imagesArray && <ImageGallery arrayImages={imagesArray} onSubmit={this.isCurrentImage} />}
+
+        {!nameImage && (
+          <div className="container-paragraphInfo">
+            <p className="paragraphInfo"> Пожалуйста введите имя в поле !</p>
+          </div>
+        )}
+        <ToastContainer autoClose={3000} />
+        {loading && <Loader />}
+        {imagesArray.length !== 0 && <Button onClick={this.onClickLoadMore}>загрузить ещё</Button>}
       </>
     );
   }
