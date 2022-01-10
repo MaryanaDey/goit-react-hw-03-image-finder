@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import shortid from 'shortid';
 import { toast } from 'react-toastify';
+
 import '../styles/styles.css';
+
+// import FetchAPI from "./FetchAPI";
 
 export default class Searchbar extends Component {
   state = {
@@ -9,6 +12,8 @@ export default class Searchbar extends Component {
   };
 
   onValueInput = e => {
+    // const { name, value } = e.currentTarget;
+    // this.setState({ [name]: value });
     this.setState({ nameImage: e.currentTarget.value.toLowerCase() });
   };
 
@@ -16,7 +21,8 @@ export default class Searchbar extends Component {
     e.preventDefault();
 
     if (this.state.nameImage.trim() === '') {
-      toast.error('Введите пожалуйста название картинок');
+      toast.error("Введіть будь ласка ім'я картинок.");
+
       return;
     }
     this.props.onSubmit(this.state.nameImage.trim());
@@ -25,7 +31,6 @@ export default class Searchbar extends Component {
 
   render() {
     const keySearch = shortid.generate();
-
     return (
       <header className="Searchbar">
         <form className="SearchForm" onSubmit={this.onSubmitFetch}>
@@ -45,6 +50,10 @@ export default class Searchbar extends Component {
           />
         </form>
       </header>
+      //   <form>
+      //     <label htmlFor={keySearch}>Пошук</label>
+      //     <input id={keySearch}></input>
+      //   </form>
     );
   }
 }

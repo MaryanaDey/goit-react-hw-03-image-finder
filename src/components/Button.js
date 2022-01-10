@@ -1,4 +1,5 @@
 import React from 'react';
+
 import '../styles/styles.css';
 
 function Button({ children, onClick }) {
@@ -10,5 +11,4 @@ function Button({ children, onClick }) {
     </div>
   );
 }
-
 export default Button;

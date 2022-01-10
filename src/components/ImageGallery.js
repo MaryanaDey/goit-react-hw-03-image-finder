@@ -9,7 +9,7 @@ export default function ImageGallery({ arrayImages, onSubmit }) {
       {arrayImages.map(({ id, webformatURL, largeImageURL, tags }) => (
         <ImageGalleryItem
           key={id}
-          webformatUrl={webformatURL}
+          webformatURL={webformatURL}
           tags={tags}
           largeImageURL={largeImageURL}
           onClick={onSubmit}

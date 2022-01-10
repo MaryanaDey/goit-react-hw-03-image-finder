@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 import Api from './services/FetchAPI';
 import Searchbar from './components/Searchbar';
 import Button from './components/Button';
 import ImageGallery from './components/ImageGallery';
+//import Modal from "./components/Modal"
 import Loader from './components/Loader';
+
 import './styles/styles.css';
-//import Modal from "components/Modal";
 
 export default class Finder extends Component {
   state = {
@@ -30,6 +32,15 @@ export default class Finder extends Component {
       });
       this.searchImagesFetch();
     }
+    console.log('update');
+  }
+
+  componentDidMount(selectedImage) {
+    console.log('mount');
+  }
+
+  componentWillUnmount() {
+    console.log('Unmount');
   }
 
   searchImagesFetch = () => {
@@ -59,7 +70,9 @@ export default class Finder extends Component {
   };
 
   togleModal = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
   };
 
   isHendleFormaSubmit = nameImage => {
@@ -88,12 +101,11 @@ export default class Finder extends Component {
   };
 
   render() {
-    const { loading, showModal, nameImage, imagesArray, selectedImage } = this.state;
+    const { loading, nameImage, imagesArray } = this.state;
 
     return (
       <>
         <Searchbar onSubmit={this.isHendleFormaSubmit} />
-
         {imagesArray && <ImageGallery arrayImages={imagesArray} onSubmit={this.isCurrentImage} />}
 
         {!nameImage && (
@@ -101,8 +113,9 @@ export default class Finder extends Component {
             <p className="paragraphInfo"> Пожалуйста введите имя в поле !</p>
           </div>
         )}
+
         <ToastContainer autoClose={3000} />
-        {loading && <Loader />}
+
         {imagesArray.length !== 0 && <Button onClick={this.onClickLoadMore}>загрузить ещё</Button>}
       </>
     );
