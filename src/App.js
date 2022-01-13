@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
-
 import 'react-toastify/dist/ReactToastify.css';
 
 import Api from './services/FetchAPI';
 import Searchbar from './components/Searchbar';
 import Button from './components/Button';
 import ImageGallery from './components/ImageGallery';
-//import Modal from "./components/Modal"
-import Loader from './components/Loader';
-
+import Modal from './components/Modal/Modal';
+import Loader from './components/Loader/Loader';
 import './styles/styles.css';
 
 export default class Finder extends Component {
@@ -32,7 +30,6 @@ export default class Finder extends Component {
       });
       this.searchImagesFetch();
     }
-    console.log('update');
   }
 
   componentDidMount(selectedImage) {
@@ -101,20 +98,26 @@ export default class Finder extends Component {
   };
 
   render() {
-    const { loading, nameImage, imagesArray } = this.state;
+    const { nameImage, imagesArray, showModal, selectedImage, loading } = this.state;
 
     return (
       <>
+        <ToastContainer autoClose={3000} />
         <Searchbar onSubmit={this.isHendleFormaSubmit} />
         {imagesArray && <ImageGallery arrayImages={imagesArray} onSubmit={this.isCurrentImage} />}
+
+        {showModal && (
+          <Modal onClose={this.togleModal}>
+            <img src={selectedImage[0]} alt={selectedImage[1]} />
+          </Modal>
+        )}
+        {loading && <Loader />}
 
         {!nameImage && (
           <div className="container-paragraphInfo">
             <p className="paragraphInfo"> Пожалуйста введите имя в поле !</p>
           </div>
         )}
-
-        <ToastContainer autoClose={3000} />
 
         {imagesArray.length !== 0 && <Button onClick={this.onClickLoadMore}>загрузить ещё</Button>}
       </>
